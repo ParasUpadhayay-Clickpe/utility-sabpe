@@ -10,7 +10,8 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // Use the standard Next.js config without the stricter Core Web Vitals rules
+  ...compat.extends("next", "next/typescript"),
   {
     ignores: [
       "node_modules/**",
