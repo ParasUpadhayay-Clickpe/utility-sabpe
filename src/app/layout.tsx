@@ -19,8 +19,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SabPe - Secure Insurance Payments",
-  description: "Pay insurance premiums securely and instantly with SabPe.",
+  title: "SabPe - Secure Utility Bill Payments",
+  description: "Pay your utility bills securely and instantly with SabPe.",
 };
 
 export default function RootLayout({
@@ -43,7 +43,7 @@ export default function RootLayout({
               <Link href="/#hero" className="font-medium text-gray-700 hover:text-primary transition duration-300">Home</Link>
               <Link href="/#about-us" className="font-medium text-gray-700 hover:text-primary transition duration-300">About Us</Link>
               <Link href="/#contact-us" className="font-medium text-gray-700 hover:text-primary transition duration-300">Contact</Link>
-              <Link href="/pay-premium" className="font-medium text-gray-700 hover:text-primary transition duration-300">Pay Premium</Link>
+              <Link href="/pay-premium" className="font-medium text-gray-700 hover:text-primary transition duration-300">Pay Bill</Link>
               <a href="https://SabPe.in/login.php" className="font-medium text-gray-700 hover:text-primary transition duration-300 ml-auto">Login</a>
               <a href="https://SabPe.in/register.php" className="bg-primary text-white px-6 py-2 rounded-md font-bold hover:bg-secondary transition duration-300 shadow-md">Register</a>
             </nav>
@@ -65,7 +65,7 @@ export default function RootLayout({
                   </div>
                   <h3 className="text-2xl font-bold">SabPe</h3>
                 </div>
-                <p className="text-gray-400 mb-6 leading-relaxed">Secure and convenient insurance payment solutions for individuals and businesses, simplifying your financial protection.</p>
+                <p className="text-gray-400 mb-6 leading-relaxed">Secure and convenient utility bill payment solutions for individuals and businesses.</p>
                 <div className="flex space-x-5 mt-6">
                   <a href="#" className="text-gray-400 hover:text-accent transition duration-300 text-xl"><i className="fab fa-facebook-f" /></a>
                   <a href="#" className="text-gray-400 hover:text-accent transition duration-300 text-xl"><i className="fab fa-twitter" /></a>

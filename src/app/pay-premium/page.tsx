@@ -166,7 +166,7 @@ export default function PayPremiumPage() {
 
     const selectBiller = async (b: Biller) => {
         setSelectedBiller(b);
-        setAlert({ type: "info", message: "Loading policy details form..." });
+        setAlert({ type: "info", message: "Loading bill details form..." });
         try {
             const details = await fetchBillerDetailsApi(b.billerId);
             setBillerDetails(details);
@@ -204,7 +204,7 @@ export default function PayPremiumPage() {
             const resp = await preEnquiryApi(selectedBiller.billerId, formData);
             setEnquiryData(resp);
         } catch (e: any) {
-            setAlert({ type: "error", message: e?.message || "Failed to fetch premium details" });
+            setAlert({ type: "error", message: e?.message || "Failed to fetch bill details" });
             setCurrentStep(2);
         } finally {
             setLoadingEnquiry(false);
@@ -225,11 +225,11 @@ export default function PayPremiumPage() {
                 <nav className="text-sm text-gray-500 mb-2">
                     <a href="/" className="hover:text-primary">Home</a>
                     <span className="px-2">/</span>
-                    <span className="text-gray-700">Pay Premium</span>
+                    <span className="text-gray-700">Pay Bill</span>
                 </nav>
                 <div className="text-center">
-                    <h1 className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Pay Insurance Premium</h1>
-                    <p className="text-gray-600 text-lg">Secure and instant insurance payment in just a few steps</p>
+                    <h1 className="text-4xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-primary to-secondary">Pay Utility Bill</h1>
+                    <p className="text-gray-600 text-lg">Secure and instant bill payment in just a few steps</p>
                 </div>
             </div>
 
@@ -247,7 +247,7 @@ export default function PayPremiumPage() {
                             <div className={`flex flex-col items-center ${currentStep === step ? "opacity-100" : currentStep > step ? "opacity-100" : "opacity-50"}`}>
                                 <div className={`w-12 h-12 rounded-full ${currentStep === step ? "bg-gradient-to-r from-primary to-secondary shadow-md" : currentStep > step ? "bg-secondary" : "bg-slate-300"} text-white flex items-center justify-center font-bold mb-2 text-lg`}>{step}</div>
                                 <span className="text-sm font-medium text-gray-700">
-                                    {step === 1 ? "Select Insurer" : step === 2 ? "Enter Details" : step === 3 ? "Verify Amount" : "Make Payment"}
+                                    {step === 1 ? "Select Biller" : step === 2 ? "Enter Details" : step === 3 ? "Verify Amount" : "Make Payment"}
                                 </span>
                             </div>
                             {step < 4 && <div className={`h-[2px] mx-2 flex-1 ${currentStep > step ? "bg-gradient-to-r from-secondary to-accent" : "bg-slate-300"}`} />}
@@ -259,10 +259,10 @@ export default function PayPremiumPage() {
             {/* Step 1 */}
             {currentStep === 1 && (
                 <div className="bg-white/90 rounded-xl shadow-md p-8 border border-lightBg">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Your Insurance Provider</h2>
+                    <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Your Biller</h2>
                     <div className="mb-6">
                         <div className="relative">
-                            <input value={search} onChange={(e) => setSearch(e.target.value)} type="text" placeholder="Search for your insurance provider..." className="w-full px-4 py-3 pl-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/70 shadow-sm" />
+                            <input value={search} onChange={(e) => setSearch(e.target.value)} type="text" placeholder="Search for your biller..." className="w-full px-4 py-3 pl-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/70 shadow-sm" />
                         </div>
                     </div>
                     {loadingBillers ? (
@@ -328,7 +328,7 @@ export default function PayPremiumPage() {
                 <div className="bg-white/90 rounded-xl shadow-md p-8 border border-lightBg">
                     <div className="flex items-center mb-6">
                         <button onClick={() => setCurrentStep(1)} className="text-secondary hover:text-primary mr-4"><i className="fas fa-arrow-left text-xl" /></button>
-                        <h2 className="text-2xl font-bold text-gray-900">Enter Policy Details</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">Enter Account Details</h2>
                     </div>
                     <div className="bg-lightBg rounded-lg p-4 mb-6 flex items-center">
                         <div className="w-12 h-12 bg-white rounded-lg flex items-center justify-center mr-4 overflow-hidden shadow-inner">
@@ -362,7 +362,7 @@ export default function PayPremiumPage() {
                         ))}
                         <div className="flex gap-4 pt-4">
                             <button type="button" onClick={() => setCurrentStep(1)} className="px-8 py-3 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition duration-300">Back</button>
-                            <button type="submit" className="flex-1 bg-gradient-to-r from-secondary to-primary text-white px-8 py-3 rounded-lg font-bold hover:from-primary hover:to-secondary transition duration-300 shadow-md">Fetch Premium Details</button>
+                            <button type="submit" className="flex-1 bg-gradient-to-r from-secondary to-primary text-white px-8 py-3 rounded-lg font-bold hover:from-primary hover:to-secondary transition duration-300 shadow-md">Fetch Bill Details</button>
                         </div>
                     </form>
                 </div>
@@ -373,26 +373,26 @@ export default function PayPremiumPage() {
                 <div className="bg-white/90 rounded-xl shadow-md p-8 border border-lightBg">
                     <div className="flex items-center mb-6">
                         <button onClick={() => setCurrentStep(2)} className="text-secondary hover:text-primary mr-4"><i className="fas fa-arrow-left text-xl" /></button>
-                        <h2 className="text-2xl font-bold text-gray-900">Verify Premium Details</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">Verify Bill Details</h2>
                     </div>
 
                     {loadingEnquiry ? (
                         <div className="flex flex-col justify-center items-center py-12">
                             <div className="spinner mb-4 border-4 border-gray-200 border-t-accent rounded-full w-10 h-10 animate-spin" />
-                            <p className="text-gray-600">Fetching your premium details...</p>
+                            <p className="text-gray-600">Fetching your bill details...</p>
                         </div>
                     ) : enquiryData ? (
                         <div>
                             <div className="bg-gradient-to-r from-primary to-secondary text-white rounded-lg p-6 mb-6 shadow-md">
-                                <h3 className="text-xl font-bold mb-4">Policy Information</h3>
+                                <h3 className="text-xl font-bold mb-4">Account Information</h3>
                                 <div className="space-y-2">
                                     <div className="flex justify-between"><span>Customer Name:</span><span className="font-semibold">{enquiryData.customerName || "N/A"}</span></div>
-                                    <div className="flex justify-between"><span>Policy Status:</span><span className="font-semibold">{enquiryData.policyStatus || "N/A"}</span></div>
+                                    <div className="flex justify-between"><span>Status:</span><span className="font-semibold">{enquiryData.policyStatus || "N/A"}</span></div>
                                     {enquiryData.dueDate && <div className="flex justify-between"><span>Due Date:</span><span className="font-semibold">{new Date(enquiryData.dueDate).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span></div>}
                                 </div>
                             </div>
                             <div className="bg-lightBg rounded-lg p-6 mb-6">
-                                <div className="flex justify-between items-center mb-4"><span className="text-gray-700 text-lg">Premium Amount</span><span className="text-3xl font-bold text-primary">₹{new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(enquiryData.amount)}</span></div>
+                                <div className="flex justify-between items-center mb-4"><span className="text-gray-700 text-lg">Bill Amount</span><span className="text-3xl font-bold text-primary">₹{new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(enquiryData.amount)}</span></div>
                                 <div className="space-y-2 text-sm text-gray-600" />
                             </div>
                             <div className="mb-6">
