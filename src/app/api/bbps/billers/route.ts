@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         const body = await request.json().catch(() => ({}));
         const pageNumber = body?.pagination?.pageNumber ?? 1;
         const recordsPerPage = body?.pagination?.recordsPerPage ?? 50;
-        const categoryKey = body?.filters?.categoryKey ?? "C11";
+        const categoryKey = body?.filters?.categoryKey ?? "C04";
 
         const res = await fetch(`${BASE_URL}/marketplace/utilityPayments/billers`, {
             method: "POST",

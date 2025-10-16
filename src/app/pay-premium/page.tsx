@@ -52,7 +52,7 @@ async function fetchBillers(pageNumber: number, recordsPerPage: number): Promise
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             pagination: { pageNumber, recordsPerPage },
-            filters: { categoryKey: "C11" },
+            filters: { categoryKey: "C04" },
         }),
     });
     const data = await res.json();
