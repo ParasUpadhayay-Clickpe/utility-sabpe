@@ -33,6 +33,15 @@ type EnquiryResponse = {
     enquiryReferenceId: string;
     amount: number;
     customerName?: string;
+    billNumber?: string;
+    billPeriod?: string;
+    billDate?: string;
+    billDueDate?: string;
+    status?: string;
+    statuscode?: string;
+    customerParamsDetails?: { Name: string; Value: string }[];
+    billDetails?: any[];
+    additionalDetails?: any[];
     policyStatus?: string;
     dueDate?: string;
 };
@@ -113,13 +122,25 @@ async function preEnquiryApi(billerId: string, inputParameters: Record<string, s
         body: JSON.stringify({ billerId, inputParameters, externalRef }),
     });
     const data = await res.json();
-    const e = data?.data || data;
+    const payload = data || {};
+    const d = payload?.data || {};
+    const amountStr = d?.BillAmount ?? d?.amount ?? "0";
     return {
-        enquiryReferenceId: e?.enquiryReferenceId || externalRef,
-        amount: e?.amount ?? 0,
-        customerName: e?.customerName,
-        policyStatus: e?.policyStatus,
-        dueDate: e?.dueDate,
+        enquiryReferenceId: d?.enquiryReferenceId || externalRef,
+        amount: typeof amountStr === "number" ? amountStr : parseFloat(String(amountStr) || "0") || 0,
+        customerName: d?.CustomerName?.trim?.() || d?.customerName,
+        billNumber: d?.BillNumber,
+        billPeriod: d?.BillPeriod,
+        billDate: d?.BillDate,
+        billDueDate: d?.BillDueDate,
+        status: payload?.status,
+        statuscode: payload?.statuscode,
+        customerParamsDetails: Array.isArray(d?.CustomerParamsDetails) ? d.CustomerParamsDetails : [],
+        billDetails: Array.isArray(d?.BillDetails) ? d.BillDetails : [],
+        additionalDetails: Array.isArray(d?.AdditionalDetails) ? d.AdditionalDetails : [],
+        // legacy fallbacks
+        policyStatus: d?.policyStatus,
+        dueDate: d?.dueDate,
     };
 }
 
@@ -387,13 +408,30 @@ export default function PayPremiumPage() {
                                 <h3 className="text-xl font-bold mb-4">Account Information</h3>
                                 <div className="space-y-2">
                                     <div className="flex justify-between"><span>Customer Name:</span><span className="font-semibold">{enquiryData.customerName || "N/A"}</span></div>
-                                    <div className="flex justify-between"><span>Status:</span><span className="font-semibold">{enquiryData.policyStatus || "N/A"}</span></div>
-                                    {enquiryData.dueDate && <div className="flex justify-between"><span>Due Date:</span><span className="font-semibold">{new Date(enquiryData.dueDate).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" })}</span></div>}
+                                    <div className="flex justify-between"><span>Status:</span><span className="font-semibold">{enquiryData.status || "N/A"} {enquiryData.statuscode ? `(${enquiryData.statuscode})` : ""}</span></div>
+                                    {enquiryData.enquiryReferenceId && (
+                                        <div className="flex justify-between"><span>Enquiry Ref:</span><span className="font-semibold break-all">{enquiryData.enquiryReferenceId}</span></div>
+                                    )}
+                                    {enquiryData.billNumber && <div className="flex justify-between"><span>Bill Number:</span><span className="font-semibold">{enquiryData.billNumber}</span></div>}
+                                    {enquiryData.billPeriod && <div className="flex justify-between"><span>Bill Period:</span><span className="font-semibold">{enquiryData.billPeriod}</span></div>}
+                                    {enquiryData.billDate && <div className="flex justify-between"><span>Bill Date:</span><span className="font-semibold">{enquiryData.billDate}</span></div>}
+                                    {enquiryData.billDueDate && <div className="flex justify-between"><span>Bill Due Date:</span><span className="font-semibold">{enquiryData.billDueDate}</span></div>}
                                 </div>
                             </div>
                             <div className="bg-lightBg rounded-lg p-6 mb-6">
                                 <div className="flex justify-between items-center mb-4"><span className="text-gray-700 text-lg">Bill Amount</span><span className="text-3xl font-bold text-primary">₹{new Intl.NumberFormat("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(enquiryData.amount)}</span></div>
-                                <div className="space-y-2 text-sm text-gray-600" />
+                                <div className="space-y-2 text-sm text-gray-600">
+                                    {Array.isArray(enquiryData.customerParamsDetails) && enquiryData.customerParamsDetails.length > 0 && (
+                                        <div>
+                                            <div className="font-semibold text-gray-700 mb-2">Customer Parameters</div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                {enquiryData.customerParamsDetails.map((p, idx) => (
+                                                    <div key={`${p.Name}-${idx}`} className="flex justify-between"><span>{p.Name}:</span><span className="font-medium">{p.Value}</span></div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
                             </div>
                             <div className="mb-6">
                                 <label className="block text-gray-700 font-semibold mb-3">Select Payment Mode</label>
