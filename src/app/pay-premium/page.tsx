@@ -55,13 +55,13 @@ type BillerMeta = {
     recordTo: number;
 };
 
-async function fetchBillers(pageNumber: number, recordsPerPage: number): Promise<{ records: Biller[]; meta: BillerMeta }> {
+async function fetchBillers(pageNumber: number, recordsPerPage: number, categoryKey: "C04" | "C08" | "C14"): Promise<{ records: Biller[]; meta: BillerMeta }> {
     const res = await fetch("/api/bbps/billers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             pagination: { pageNumber, recordsPerPage },
-            filters: { categoryKey: "C04" },
+            filters: { categoryKey },
         }),
     });
     const data = await res.json();
@@ -158,13 +158,14 @@ export default function PayPremiumPage() {
     const [meta, setMeta] = useState<BillerMeta | null>(null);
     const [loadingEnquiry, setLoadingEnquiry] = useState(false);
     const [alert, setAlert] = useState<{ type: "info" | "error" | "success"; message: string } | null>(null);
+    const [category, setCategory] = useState<"C04" | "C08" | "C14">("C04");
 
     useEffect(() => {
         let abort = false;
         (async () => {
             try {
                 setLoadingBillers(true);
-                const { records, meta } = await fetchBillers(pageNumber, 9);
+                const { records, meta } = await fetchBillers(pageNumber, 9, category);
                 if (!abort) {
                     setBillers(records);
                     setMeta(meta);
@@ -178,7 +179,7 @@ export default function PayPremiumPage() {
         return () => {
             abort = true;
         };
-    }, [pageNumber]);
+    }, [pageNumber, category]);
 
     const filteredBillers = useMemo(() => {
         const q = search.toLowerCase();
@@ -281,6 +282,29 @@ export default function PayPremiumPage() {
             {currentStep === 1 && (
                 <div className="bg-white/90 rounded-xl shadow-md p-8 border border-lightBg">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Select Your Biller</h2>
+                    <div className="mb-6 flex flex-wrap gap-3">
+                        <button
+                            type="button"
+                            onClick={() => { setCategory("C04"); setPageNumber(1); setSearch(""); setSelectedBiller(null); setBillerDetails(null); }}
+                            className={`px-4 py-2 rounded-md border text-sm font-medium ${category === "C04" ? "border-secondary bg-lightBg ring-2 ring-accent/40" : "border-gray-300 hover:border-secondary"}`}
+                        >
+                            Electricity
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => { setCategory("C08"); setPageNumber(1); setSearch(""); setSelectedBiller(null); setBillerDetails(null); }}
+                            className={`px-4 py-2 rounded-md border text-sm font-medium ${category === "C08" ? "border-secondary bg-lightBg ring-2 ring-accent/40" : "border-gray-300 hover:border-secondary"}`}
+                        >
+                            Water
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => { setCategory("C14"); setPageNumber(1); setSearch(""); setSelectedBiller(null); setBillerDetails(null); }}
+                            className={`px-4 py-2 rounded-md border text-sm font-medium ${category === "C14" ? "border-secondary bg-lightBg ring-2 ring-accent/40" : "border-gray-300 hover:border-secondary"}`}
+                        >
+                            Gas
+                        </button>
+                    </div>
                     <div className="mb-6">
                         <div className="relative">
                             <input value={search} onChange={(e) => setSearch(e.target.value)} type="text" placeholder="Search for your biller..." className="w-full px-4 py-3 pl-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/70 shadow-sm" />
