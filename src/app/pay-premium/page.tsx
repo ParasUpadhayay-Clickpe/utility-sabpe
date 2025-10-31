@@ -55,7 +55,7 @@ type BillerMeta = {
     recordTo: number;
 };
 
-async function fetchBillers(pageNumber: number, recordsPerPage: number, categoryKey: "C04" | "C08" | "C14"): Promise<{ records: Biller[]; meta: BillerMeta }> {
+async function fetchBillers(pageNumber: number, recordsPerPage: number, categoryKey: "C04" | "C08" | "C07"): Promise<{ records: Biller[]; meta: BillerMeta }> {
     const res = await fetch("/api/bbps/billers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -158,7 +158,7 @@ export default function PayPremiumPage() {
     const [meta, setMeta] = useState<BillerMeta | null>(null);
     const [loadingEnquiry, setLoadingEnquiry] = useState(false);
     const [alert, setAlert] = useState<{ type: "info" | "error" | "success"; message: string } | null>(null);
-    const [category, setCategory] = useState<"C04" | "C08" | "C14">("C04");
+    const [category, setCategory] = useState<"C04" | "C08" | "C07">("C04");
 
     useEffect(() => {
         let abort = false;
@@ -299,8 +299,8 @@ export default function PayPremiumPage() {
                         </button>
                         <button
                             type="button"
-                            onClick={() => { setCategory("C14"); setPageNumber(1); setSearch(""); setSelectedBiller(null); setBillerDetails(null); }}
-                            className={`px-4 py-2 rounded-md border text-sm font-medium ${category === "C14" ? "border-secondary bg-lightBg ring-2 ring-accent/40" : "border-gray-300 hover:border-secondary"}`}
+                            onClick={() => { setCategory("C07"); setPageNumber(1); setSearch(""); setSelectedBiller(null); setBillerDetails(null); }}
+                            className={`px-4 py-2 rounded-md border text-sm font-medium ${category === "C07" ? "border-secondary bg-lightBg ring-2 ring-accent/40" : "border-gray-300 hover:border-secondary"}`}
                         >
                             Gas
                         </button>
